@@ -180,7 +180,8 @@
   .install p { font-size: .94rem; color: var(--ink-soft); max-width: none; }
   .install ol { margin: 0; padding: 0; }
 
-  .copyrow { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; margin-top: .35rem; }
+  .copyrow { grid-column: 2; display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; margin-top: .35rem; min-width: 0; }
+  .print-url { display: none; font-family: var(--f-mono); font-size: .82rem; color: var(--accent); overflow-wrap: anywhere; }
   .copyrow input {
     flex: 1 1 18rem;
     min-width: 0;
@@ -340,6 +341,19 @@
     max-width: var(--prose);
   }
 
+  /* Pe hartie: fara ceas, fara butoane; linkul promptului scris complet. */
+  @media print {
+    @page { size: A4; margin: 14mm 12mm; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .status-strip, .copyrow input, .copyrow .btn { display: none !important; }
+    .print-url { display: inline; }
+    .page { padding-block: 0; gap: 2rem; max-width: none; }
+    .install li, .slot, .cmd, .note, .specimen, tr, .w-row { break-inside: avoid; }
+    h2, h3 { break-after: avoid; }
+    table { min-width: 0; }
+    .scroll { overflow: visible; }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     * { animation: none !important; transition: none !important; }
   }
@@ -388,6 +402,7 @@
           <input id="prompt-url" type="text" readonly value="https://github.com/silvius67/fx-brief/blob/main/prompt-instalare.md" aria-label="Linkul promptului de instalare">
           <button class="btn" type="button" id="copy-url">Copiază linkul</button>
           <a class="btn ghost" href="https://github.com/silvius67/fx-brief/blob/main/prompt-instalare.md">Deschide promptul</a>
+          <span class="print-url">https://github.com/silvius67/fx-brief/blob/main/prompt-instalare.md</span>
         </div>
       </li>
       <li>
