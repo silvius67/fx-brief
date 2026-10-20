@@ -9,9 +9,10 @@ Node.js 18+, zero dependențe, zero chei API, fără conturi.
 
 ## Instalare
 
-Cel mai simplu: dai lui Claude Code promptul de instalare primit odată cu linkul.
-El verifică Node.js, descarcă exact versiunea verificată, face un raport de test
-și, dacă vrei, programează rapoartele la orele fixe.
+Cel mai simplu: copiezi tot conținutul fișierului
+[prompt-instalare.md](prompt-instalare.md) și îl lipești în Claude Code. El verifică
+Node.js, descarcă exact versiunea verificată, face un raport de test și, dacă vrei,
+programează rapoartele la orele fixe.
 
 ## Folosire
 
