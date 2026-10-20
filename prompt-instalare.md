@@ -28,16 +28,16 @@ Află sistemul de operare și shell-ul (macOS, Linux sau Windows cu PowerShell, 
 
 PASUL 2 DIN 5: DESCARCĂ
 Instalează în folderul fx-brief din folderul meu personal (home): ~/fx-brief pe macOS și Linux, %USERPROFILE%\fx-brief pe Windows. Rulează comenzile de mai jos din folderul meu personal.
-Arhiva e legată de o versiune fixă (commit d22aa0f9cdee118f61c3aeed52741c62937c75b9), așa că primesc exact codul verificat, chiar dacă proiectul se schimbă mai târziu. Folderul din arhivă se numește fx-brief-d22aa0f9cdee118f61c3aeed52741c62937c75b9. Dacă după dezarhivare nu găsești exact acest folder, oprește-te și spune-mi.
+Arhiva e legată de o versiune fixă (commit 09386baa270ebf07f7f5699f18003d46abc3c9af), așa că primesc exact codul verificat, chiar dacă proiectul se schimbă mai târziu. Folderul din arhivă se numește fx-brief-09386baa270ebf07f7f5699f18003d46abc3c9af. Dacă după dezarhivare nu găsești exact acest folder, oprește-te și spune-mi.
 - Dacă ~/fx-brief există deja și are run.js în el, e o actualizare: descarcă noua versiune într-un folder temporar și copiază peste tot, în afară de folderul reports (acolo sunt rapoartele mele vechi).
 - macOS, Linux sau Git Bash:
-    curl -fsSL https://github.com/silvius67/fx-brief/archive/d22aa0f9cdee118f61c3aeed52741c62937c75b9.tar.gz | tar -xz
-    mv fx-brief-d22aa0f9cdee118f61c3aeed52741c62937c75b9 fx-brief
+    curl -fsSL https://github.com/silvius67/fx-brief/archive/09386baa270ebf07f7f5699f18003d46abc3c9af.tar.gz | tar -xz
+    mv fx-brief-09386baa270ebf07f7f5699f18003d46abc3c9af fx-brief
 - Windows PowerShell:
-    Invoke-WebRequest -Uri https://github.com/silvius67/fx-brief/archive/d22aa0f9cdee118f61c3aeed52741c62937c75b9.zip -OutFile "$env:TEMP\fx-brief.zip" -UseBasicParsing
+    Invoke-WebRequest -Uri https://github.com/silvius67/fx-brief/archive/09386baa270ebf07f7f5699f18003d46abc3c9af.zip -OutFile "$env:TEMP\fx-brief.zip" -UseBasicParsing
     Expand-Archive "$env:TEMP\fx-brief.zip" -DestinationPath "$env:TEMP\fx-brief-unpack" -Force
-    Move-Item "$env:TEMP\fx-brief-unpack\fx-brief-d22aa0f9cdee118f61c3aeed52741c62937c75b9" "$env:USERPROFILE\fx-brief"
-- Windows cmd: `curl.exe -fsSL -o "%TEMP%\fx-brief.zip" https://github.com/silvius67/fx-brief/archive/d22aa0f9cdee118f61c3aeed52741c62937c75b9.zip`, apoi `tar -xf "%TEMP%\fx-brief.zip"` și redenumește folderul în fx-brief.
+    Move-Item "$env:TEMP\fx-brief-unpack\fx-brief-09386baa270ebf07f7f5699f18003d46abc3c9af" "$env:USERPROFILE\fx-brief"
+- Windows cmd: `curl.exe -fsSL -o "%TEMP%\fx-brief.zip" https://github.com/silvius67/fx-brief/archive/09386baa270ebf07f7f5699f18003d46abc3c9af.zip`, apoi `tar -xf "%TEMP%\fx-brief.zip"` și redenumește folderul în fx-brief.
 - În Windows PowerShell 5, leagă comenzile cu ; nu cu &&.
 Verifică apoi că în folderul fx-brief există run.js, manual.html, gbpusd\brief.js și eurusd\brief.js. Șterge arhiva și folderele temporare.
 
