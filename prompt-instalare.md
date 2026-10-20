@@ -28,18 +28,18 @@ Află sistemul de operare și shell-ul (macOS, Linux sau Windows cu PowerShell, 
 
 PASUL 2 DIN 5: DESCARCĂ
 Instalează în folderul fx-brief din folderul meu personal (home): ~/fx-brief pe macOS și Linux, %USERPROFILE%\fx-brief pe Windows. Rulează comenzile de mai jos din folderul meu personal.
-Arhiva e legată de o versiune fixă (commit fcddb003c2b605143a8b82e2c539a3beb8d1c043), așa că primesc exact codul verificat, chiar dacă proiectul se schimbă mai târziu. Folderul din arhivă se numește fx-brief-fcddb003c2b605143a8b82e2c539a3beb8d1c043. Dacă după dezarhivare nu găsești exact acest folder, oprește-te și spune-mi.
+Arhiva e legată de o versiune fixă (commit d22aa0f9cdee118f61c3aeed52741c62937c75b9), așa că primesc exact codul verificat, chiar dacă proiectul se schimbă mai târziu. Folderul din arhivă se numește fx-brief-d22aa0f9cdee118f61c3aeed52741c62937c75b9. Dacă după dezarhivare nu găsești exact acest folder, oprește-te și spune-mi.
 - Dacă ~/fx-brief există deja și are run.js în el, e o actualizare: descarcă noua versiune într-un folder temporar și copiază peste tot, în afară de folderul reports (acolo sunt rapoartele mele vechi).
 - macOS, Linux sau Git Bash:
-    curl -fsSL https://github.com/silvius67/fx-brief/archive/fcddb003c2b605143a8b82e2c539a3beb8d1c043.tar.gz | tar -xz
-    mv fx-brief-fcddb003c2b605143a8b82e2c539a3beb8d1c043 fx-brief
+    curl -fsSL https://github.com/silvius67/fx-brief/archive/d22aa0f9cdee118f61c3aeed52741c62937c75b9.tar.gz | tar -xz
+    mv fx-brief-d22aa0f9cdee118f61c3aeed52741c62937c75b9 fx-brief
 - Windows PowerShell:
-    Invoke-WebRequest -Uri https://github.com/silvius67/fx-brief/archive/fcddb003c2b605143a8b82e2c539a3beb8d1c043.zip -OutFile "$env:TEMP\fx-brief.zip" -UseBasicParsing
+    Invoke-WebRequest -Uri https://github.com/silvius67/fx-brief/archive/d22aa0f9cdee118f61c3aeed52741c62937c75b9.zip -OutFile "$env:TEMP\fx-brief.zip" -UseBasicParsing
     Expand-Archive "$env:TEMP\fx-brief.zip" -DestinationPath "$env:TEMP\fx-brief-unpack" -Force
-    Move-Item "$env:TEMP\fx-brief-unpack\fx-brief-fcddb003c2b605143a8b82e2c539a3beb8d1c043" "$env:USERPROFILE\fx-brief"
-- Windows cmd: `curl.exe -fsSL -o "%TEMP%\fx-brief.zip" https://github.com/silvius67/fx-brief/archive/fcddb003c2b605143a8b82e2c539a3beb8d1c043.zip`, apoi `tar -xf "%TEMP%\fx-brief.zip"` și redenumește folderul în fx-brief.
+    Move-Item "$env:TEMP\fx-brief-unpack\fx-brief-d22aa0f9cdee118f61c3aeed52741c62937c75b9" "$env:USERPROFILE\fx-brief"
+- Windows cmd: `curl.exe -fsSL -o "%TEMP%\fx-brief.zip" https://github.com/silvius67/fx-brief/archive/d22aa0f9cdee118f61c3aeed52741c62937c75b9.zip`, apoi `tar -xf "%TEMP%\fx-brief.zip"` și redenumește folderul în fx-brief.
 - În Windows PowerShell 5, leagă comenzile cu ; nu cu &&.
-Verifică apoi că în folderul fx-brief există run.js, gbpusd\brief.js și eurusd\brief.js. Șterge arhiva și folderele temporare.
+Verifică apoi că în folderul fx-brief există run.js, manual.html, gbpusd\brief.js și eurusd\brief.js. Șterge arhiva și folderele temporare.
 
 PASUL 3 DIN 5: PRIMUL RAPORT
 Din folderul fx-brief rulează `node run.js`. Durează în jur de un minut, pentru că citește multe surse.
@@ -69,6 +69,7 @@ Dacă am instalat node cu nvm, spune-mi într-un rând că, dacă schimb versiun
 PASUL 5 DIN 5: GATA
 Încheie cu un singur mesaj scurt și prietenos, în cuvinte simple, doar cu asta:
 - Unde e raportul: reports/ultimul.html din folderul fx-brief; fiecare raport rămâne și ca fișier datat, 30 de zile.
+- Manualul complet e manual.html din folderul fx-brief: dublu-click și se deschide în browser.
 - Cum fac un raport oricând: dublu-click pe start.bat (Windows) sau start.command (Mac), ori `node run.js` în folderul fx-brief.
 - Dacă am ales programarea: la ce ore vin rapoartele, și cum o opresc: pe Windows `Unregister-ScheduledTask -TaskName 'FX Brief' -Confirm:$false`; pe Mac `launchctl bootout gui/$(id -u)/local.fx-brief` și șterg ~/Library/LaunchAgents/local.fx-brief.plist; pe Linux `systemctl --user disable --now fx-brief.timer`. Sau îți cer ție să o faci.
 - Cum citesc raportul, în trei rânduri: scorul net de la −3 la +3 (peste ±0.5 contează, peste ±1.5 e puternic); „fără trade” când fundamentalul și prețul se contrazic, oricât de mare ar fi scorul; nivelurile de referință apar doar când semnalele sunt aliniate.
