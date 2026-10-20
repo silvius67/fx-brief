@@ -14,6 +14,10 @@ Cel mai simplu: copiezi tot conținutul fișierului
 Node.js, descarcă exact versiunea verificată, face un raport de test și, dacă vrei,
 programează rapoartele la orele fixe.
 
+Manualul complet, cu instalarea, programul, cum se citește un raport și ce faci când
+ceva nu merge, e în [manual.html](manual.html). După instalare îl găsești în folderul
+`fx-brief`; deschide-l cu dublu-click, se vede în browser.
+
 ## Folosire
 
 ```bash

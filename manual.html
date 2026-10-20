@@ -1,0 +1,694 @@
+<!doctype html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Manual FX Brief</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,500;1,400&display=swap">
+
+<style>
+  /* Fratele manualelor GBP/USD (teal) si EUR/USD (albastru): aceeasi tipografie, accent ocru,
+     o coloana de lectura; sectiunile urmeaza drumul unui prieten: instalare, folosire, citire, probleme. */
+  :root {
+    --ground:    #f6f4ef;
+    --surface:   #ffffff;
+    --sunken:    #ece8df;
+    --border:    #dcd5c7;
+    --border-hi: #c3b9a5;
+    --ink:       #1b1812;
+    --ink-soft:  #463f33;
+    --muted:     #6b6253;
+    --accent:    #7a5410;
+    --accent-bg: #f1e7d2;
+    --good:      #16794a;
+    --warn:      #8a6d1f;
+    --bad:       #a4262c;
+    --good-bg:   #e4f1ea;
+    --warn-bg:   #f6efdb;
+
+    --f-display: 'IBM Plex Sans Condensed', 'Helvetica Neue', Arial, sans-serif;
+    --f-body:    'IBM Plex Serif', Georgia, 'Times New Roman', serif;
+    --f-mono:    'IBM Plex Mono', 'SFMono-Regular', Consolas, monospace;
+
+    --wrap: 60rem;
+    --prose: 40rem;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:    #13110d;
+      --surface:   #1c1913;
+      --sunken:    #171410;
+      --border:    #332d23;
+      --border-hi: #4a4233;
+      --ink:       #ede7dc;
+      --ink-soft:  #c8bfae;
+      --muted:     #9d937f;
+      --accent:    #d6a556;
+      --accent-bg: #2e2414;
+      --good:      #4cb383;
+      --warn:      #c9a44a;
+      --bad:       #e0787d;
+      --good-bg:   #142b22;
+      --warn-bg:   #2c2617;
+      color-scheme: dark;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground:    #13110d;
+    --surface:   #1c1913;
+    --sunken:    #171410;
+    --border:    #332d23;
+    --border-hi: #4a4233;
+    --ink:       #ede7dc;
+    --ink-soft:  #c8bfae;
+    --muted:     #9d937f;
+    --accent:    #d6a556;
+    --accent-bg: #2e2414;
+    --good:      #4cb383;
+    --warn:      #c9a44a;
+    --bad:       #e0787d;
+    --good-bg:   #142b22;
+    --warn-bg:   #2c2617;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--f-body);
+    font-size: 16.5px;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: var(--wrap);
+    margin: 0 auto;
+    padding-block: 3rem 5rem;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    display: flex;
+    flex-direction: column;
+    gap: 3.25rem;
+  }
+
+  .masthead { display: flex; flex-direction: column; gap: .9rem; }
+  .eyebrow {
+    font-family: var(--f-mono);
+    font-size: .7rem;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+  }
+  h1 {
+    font-family: var(--f-display);
+    font-weight: 700;
+    font-size: clamp(2.1rem, 5.5vw, 3.1rem);
+    line-height: 1.04;
+    letter-spacing: -.015em;
+    margin: 0;
+    text-wrap: balance;
+  }
+  .pairs { color: var(--accent); }
+  .standfirst { max-width: var(--prose); color: var(--ink-soft); font-size: 1.06rem; margin: 0; }
+
+  .status-strip {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: .55rem 1.4rem;
+    padding: .85rem 1.1rem;
+    background: var(--accent-bg);
+    border-left: 3px solid var(--accent);
+    font-family: var(--f-mono);
+    font-size: .84rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .status-strip .k { color: var(--muted); }
+  .status-strip .v { color: var(--ink); font-weight: 600; }
+
+  section { display: flex; flex-direction: column; gap: 1.1rem; }
+  h2 {
+    font-family: var(--f-display);
+    font-weight: 600;
+    font-size: 1.45rem;
+    letter-spacing: -.01em;
+    margin: 0;
+    padding-bottom: .5rem;
+    border-bottom: 1px solid var(--border-hi);
+    text-wrap: balance;
+  }
+  h3 { font-family: var(--f-display); font-weight: 600; font-size: 1.02rem; margin: 0; color: var(--ink); }
+  p { margin: 0; max-width: var(--prose); }
+  .lede { color: var(--ink-soft); }
+
+  a { color: var(--accent); text-underline-offset: .17em; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  code, .mono { font-family: var(--f-mono); font-size: .88em; font-variant-numeric: tabular-nums; }
+  code { background: var(--sunken); border: 1px solid var(--border); padding: .08em .38em; border-radius: 2px; }
+
+  /* Instalarea e o secventa reala, deci pasii sunt numerotati. */
+  .install { display: grid; gap: .6rem; counter-reset: pas; }
+  .install li {
+    list-style: none;
+    counter-increment: pas;
+    display: grid;
+    grid-template-columns: 2.2rem 1fr;
+    gap: .2rem .8rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: .9rem 1.1rem;
+  }
+  .install li::before {
+    content: counter(pas);
+    grid-row: span 2;
+    font-family: var(--f-mono);
+    font-weight: 600;
+    font-size: 1.4rem;
+    line-height: 1.2;
+    color: var(--accent);
+  }
+  .install h3, .install p { min-width: 0; }
+  .install p { font-size: .94rem; color: var(--ink-soft); max-width: none; }
+  .install ol { margin: 0; padding: 0; }
+
+  .copyrow { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; margin-top: .35rem; }
+  .copyrow input {
+    flex: 1 1 18rem;
+    min-width: 0;
+    font-family: var(--f-mono);
+    font-size: .8rem;
+    padding: .45rem .6rem;
+    border: 1px solid var(--border-hi);
+    background: var(--sunken);
+    color: var(--ink);
+    border-radius: 2px;
+  }
+  .btn {
+    font-family: var(--f-display);
+    font-weight: 600;
+    font-size: .9rem;
+    padding: .45rem .9rem;
+    border: 1px solid var(--accent);
+    background: var(--accent);
+    color: var(--surface);
+    border-radius: 2px;
+    cursor: pointer;
+  }
+  .btn.ghost { background: transparent; color: var(--accent); text-decoration: none; display: inline-block; }
+
+  .timetable { display: grid; gap: .5rem; }
+  @media (min-width: 46rem) { .timetable { grid-template-columns: repeat(3, 1fr); } }
+  .slot {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--accent);
+    padding: 1rem 1.1rem 1.15rem;
+    display: flex;
+    flex-direction: column;
+    gap: .45rem;
+    min-width: 0;
+  }
+  .slot.is-next { border-color: var(--good); background: var(--good-bg); }
+  .slot.is-next .slot-time { color: var(--good); }
+  .slot-time {
+    font-family: var(--f-mono);
+    font-size: 1.6rem;
+    font-weight: 600;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    color: var(--accent);
+  }
+  .slot-what { font-size: .92rem; color: var(--ink-soft); }
+  .slot-tag {
+    align-self: flex-start;
+    font-family: var(--f-mono);
+    font-size: .64rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: .16rem .45rem;
+    border-radius: 2px;
+    background: var(--good);
+    color: var(--surface);
+    font-weight: 600;
+  }
+
+  .scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table { width: 100%; border-collapse: collapse; font-size: .92rem; min-width: 33rem; }
+  caption {
+    text-align: left;
+    font-family: var(--f-mono);
+    font-size: .72rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding-bottom: .5rem;
+  }
+  th, td { text-align: left; padding: .6rem .8rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  thead th {
+    font-family: var(--f-display);
+    font-weight: 600;
+    font-size: .8rem;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border-hi);
+    white-space: nowrap;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  td.num { font-family: var(--f-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+  /* Exemplu adnotat: capul unui raport real, cu ce inseamna fiecare bucata. */
+  .specimen {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 1.1rem 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: .9rem;
+  }
+  .specimen-tag {
+    font-family: var(--f-mono);
+    font-size: .68rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .subject {
+    font-family: var(--f-mono);
+    font-size: .95rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    overflow-wrap: anywhere;
+  }
+  .subject .up { color: var(--good); }
+  .legend { display: grid; gap: .45rem; margin: 0; }
+  @media (min-width: 40rem) { .legend { grid-template-columns: 9rem 1fr; } }
+  .legend dt { font-family: var(--f-mono); font-size: .82rem; color: var(--accent); }
+  .legend dd { margin: 0 0 .3rem; font-size: .93rem; color: var(--ink-soft); }
+
+  .weights { display: flex; flex-direction: column; gap: .5rem; max-width: 34rem; }
+  .w-row { display: grid; grid-template-columns: minmax(7.5rem, 13rem) 3.1rem 1fr; align-items: center; gap: .7rem; font-size: .9rem; }
+  .w-name { color: var(--ink-soft); }
+  .w-val { font-family: var(--f-mono); font-variant-numeric: tabular-nums; text-align: right; font-weight: 500; }
+  .w-track { background: var(--sunken); height: 9px; border-radius: 1px; }
+  .w-fill { background: var(--accent); height: 9px; border-radius: 1px; display: block; }
+
+  .cmds { display: grid; gap: .5rem; }
+  @media (min-width: 46rem) { .cmds { grid-template-columns: 1fr 1fr; } }
+  .cmd {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: .85rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: .3rem;
+    min-width: 0;
+  }
+  .cmd code { align-self: flex-start; overflow-wrap: anywhere; }
+  .cmd p { font-size: .9rem; color: var(--ink-soft); max-width: none; }
+
+  .note {
+    border-left: 3px solid var(--warn);
+    background: var(--warn-bg);
+    padding: .9rem 1.1rem;
+    font-size: .94rem;
+    color: var(--ink-soft);
+    display: flex;
+    flex-direction: column;
+    gap: .4rem;
+  }
+  .note strong { color: var(--ink); }
+  .note--flat { border-left-color: var(--border-hi); background: var(--sunken); }
+
+  footer {
+    border-top: 1px solid var(--border-hi);
+    padding-top: 1.25rem;
+    font-size: .84rem;
+    color: var(--muted);
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    max-width: var(--prose);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <div class="eyebrow">Manual pentru prieteni</div>
+    <h1>FX Brief <span class="pairs">GBP/USD · EUR/USD</span></h1>
+    <p class="standfirst">
+      Un program mic care rulează pe calculatorul tău și îți arată în browser încotro
+      înclină lira și euro față de dolar. Citește calendarul economic, datele macro,
+      dolarul larg, mișcarea din sesiunea asiatică și știrile, apoi dă un bias, o
+      încredere și, când semnalele sunt aliniate, niveluri de referință. Fără conturi,
+      fără parole, fără abonamente.
+    </p>
+    <div class="status-strip">
+      <span><span class="k">Acum în România</span> <span class="v" id="now">—</span></span>
+      <span><span class="k">Următorul raport programat</span> <span class="v" id="next">—</span></span>
+    </div>
+  </header>
+
+  <section id="instalare">
+    <h2>Instalare, în 10 minute</h2>
+    <p class="lede">
+      Instalarea o face Claude Code în locul tău. Tu doar lipești un text și răspunzi
+      la câteva întrebări.
+    </p>
+    <ol class="install">
+      <li>
+        <h3>Ai nevoie de Claude Code</h3>
+        <p>
+          Aplicația desktop Claude, tab-ul <span class="mono">Code</span>, sau Claude Code din
+          terminal. Merge pe Windows, Mac și Linux.
+        </p>
+      </li>
+      <li>
+        <h3>Copiezi promptul de instalare</h3>
+        <p>
+          Deschizi pagina de mai jos, apeși butonul de copiere de deasupra textului (iconița
+          cu două pătrățele, <span class="mono">Copy raw file</span>) și copiezi tot conținutul.
+        </p>
+        <div class="copyrow">
+          <input id="prompt-url" type="text" readonly value="https://github.com/silvius67/fx-brief/blob/main/prompt-instalare.md" aria-label="Linkul promptului de instalare">
+          <button class="btn" type="button" id="copy-url">Copiază linkul</button>
+          <a class="btn ghost" href="https://github.com/silvius67/fx-brief/blob/main/prompt-instalare.md">Deschide promptul</a>
+        </div>
+      </li>
+      <li>
+        <h3>Îl lipești în Claude Code</h3>
+        <p>
+          Claude verifică dacă ai Node.js și ți-l instalează doar dacă spui „da”. Descarcă
+          apoi exact versiunea verificată a programului în folderul
+          <span class="mono">fx-brief</span> din folderul tău personal și face primul raport.
+        </p>
+      </li>
+      <li>
+        <h3>Alegi dacă vrei rapoarte la ore fixe</h3>
+        <p>
+          Dacă spui „da”, rapoartele se fac și se deschid singure în zilele lucrătoare.
+          Poți renunța oricând.
+        </p>
+      </li>
+    </ol>
+    <div class="note note--flat">
+      <strong>Ce nu face instalarea.</strong>
+      Nu-ți cere parole, chei sau email, nu folosește drepturi de administrator și nu
+      schimbă nimic în afară de folderul <span class="mono">fx-brief</span> și, dacă vrei,
+      programarea rapoartelor. Codul e public pe GitHub și îl poți citi.
+    </div>
+  </section>
+
+  <section id="program">
+    <h2>Când vin rapoartele</h2>
+    <p class="lede">
+      Zilele lucrătoare, ora României. Fiecare raport conține ambele perechi. Orele sunt
+      alese imediat după publicările care mișcă piața.
+    </p>
+    <div class="timetable" id="timetable">
+      <div class="slot">
+        <div class="slot-time">12:20</div>
+        <div class="slot-what">După datele din UK și din zona euro: PMI, Ifo, ZEW și inflația HICP.</div>
+      </div>
+      <div class="slot">
+        <div class="slot-time">16:05</div>
+        <div class="slot-what">După datele americane de la 15:30 și deciziile BOE și BCE.</div>
+      </div>
+      <div class="slot">
+        <div class="slot-time">17:20</div>
+        <div class="slot-what">După ISM și Consumer Confidence, publicate la 17:00.</div>
+      </div>
+    </div>
+    <p>
+      Programarea merge doar cât timp calculatorul e pornit și ești logat. Dacă la ora
+      aceea e oprit, raportul respectiv se sare. Pe Linux raportul nu se deschide singur:
+      pune <span class="mono">reports/ultimul.html</span> la favorite în browser.
+    </p>
+    <div class="note">
+      <strong>Decizia Fed nu prinde niciun slot.</strong>
+      Rezerva Federală anunță la 21:00 ora României, deci apare abia în raportul de a doua
+      zi. În serile de FOMC, fă un raport la cerere după 21:30 dacă vrei reacția imediată.
+    </div>
+  </section>
+
+  <section id="folosire">
+    <h2>Folosire zilnică</h2>
+    <p class="lede">Totul stă în folderul <span class="mono">fx-brief</span> din folderul tău personal.</p>
+    <div class="cmds">
+      <div class="cmd">
+        <h3>Raport acum</h3>
+        <p>Dublu-click pe <span class="mono">start.bat</span> (Windows) sau <span class="mono">start.command</span> (Mac). Durează aproximativ un minut.</p>
+      </div>
+      <div class="cmd">
+        <h3>Ultimul raport</h3>
+        <p><span class="mono">reports/ultimul.html</span>. Are mereu ambele perechi, cele mai noi.</p>
+      </div>
+      <div class="cmd">
+        <h3>Rapoartele vechi</h3>
+        <p>Fișiere datate în <span class="mono">reports/</span>, de exemplu <span class="mono">2026-10-20_1805_eurusd.html</span>. Se păstrează 30 de zile, cu linkuri din ultimul raport.</p>
+      </div>
+      <div class="cmd">
+        <h3>Din terminal</h3>
+        <p><code>node run.js</code> pentru ambele, <code>node run.js --pair eurusd</code> pentru una singură, <code>--no-open</code> ca să nu deschidă browserul.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="citire">
+    <h2>Cum citești un raport</h2>
+    <p class="lede">
+      Prima linie din fiecare raport spune aproape tot. Exemplul de mai jos e luat dintr-un
+      raport real din 20 octombrie 2026, doar ca ilustrație.
+    </p>
+
+    <div class="specimen">
+      <div class="specimen-tag">Exemplu · capul unui raport</div>
+      <div class="subject"><span class="up">▲ BULLISH moderat</span> · scor net +1.16 · încredere MEDIE (46%) · preț 1.33740</div>
+      <dl class="legend">
+        <dt>▲ BULLISH moderat</dt>
+        <dd>Direcția. ▲ sus, ▼ jos, ■ fără direcție. Dublu (▲▲) înseamnă puternic.</dd>
+        <dt>scor net</dt>
+        <dd>Suma ponderată a celor cinci componente, aproximativ de la −3 la +3. Contează de la ±0,5; peste ±1,5 e puternic.</dd>
+        <dt>încredere</dt>
+        <dd>Cât de mult te poți baza pe semnal. Scade când nu au fost publicate date importante, când sunt puține știri, când urmează o publicare mare în aceeași zi sau când componentele se contrazic.</dd>
+        <dt>Concluzie</dt>
+        <dd>„BIAS LONG”, „BIAS SHORT” sau „FĂRĂ TRADE”. Doar la primele două apar zona de referință, nivelul de invalidare și două ținte, la raport risc/câștig de 1:1,5 și 1:2,5.</dd>
+      </dl>
+    </div>
+
+    <div class="scroll">
+      <table>
+        <caption>Praguri de interpretare</caption>
+        <thead>
+          <tr><th>Scor net</th><th>Bias</th><th>Ce înseamnă practic</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="num">peste +1.5</td><td style="color:var(--good);font-weight:600">Bullish puternic</td><td>Semnal direcțional clar în sus</td></tr>
+          <tr><td class="num">+0.5 … +1.5</td><td style="color:var(--good)">Bullish moderat</td><td>Înclinare în sus, fără convingere</td></tr>
+          <tr><td class="num">−0.5 … +0.5</td><td style="color:var(--warn)">Neutru / range</td><td>Fără avantaj; concluzia va fi „fără trade”</td></tr>
+          <tr><td class="num">−1.5 … −0.5</td><td style="color:var(--bad)">Bearish moderat</td><td>Înclinare în jos, fără convingere</td></tr>
+          <tr><td class="num">sub −1.5</td><td style="color:var(--bad);font-weight:600">Bearish puternic</td><td>Semnal direcțional clar în jos</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Din ce e făcut scorul</h3>
+    <div class="weights">
+      <div class="w-row"><span class="w-name">Surprize din calendar</span><span class="w-val">34%</span><span class="w-track"><span class="w-fill" style="width:100%"></span></span></div>
+      <div class="w-row"><span class="w-name">Macro structural</span><span class="w-val">20%</span><span class="w-track"><span class="w-fill" style="width:58.8%"></span></span></div>
+      <div class="w-row"><span class="w-name">Dolar larg</span><span class="w-val">20%</span><span class="w-track"><span class="w-fill" style="width:58.8%"></span></span></div>
+      <div class="w-row"><span class="w-name">Structura sesiunii</span><span class="w-val">15%</span><span class="w-track"><span class="w-fill" style="width:44.1%"></span></span></div>
+      <div class="w-row"><span class="w-name">Flux de știri</span><span class="w-val">11%</span><span class="w-track"><span class="w-fill" style="width:32.4%"></span></span></div>
+    </div>
+    <div class="scroll">
+      <table>
+        <caption>Ce măsoară fiecare componentă</caption>
+        <thead>
+          <tr><th>Componentă</th><th>Ce urmărește</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Surprize din calendar</td><td>Cât de departe a ieșit fiecare dată publicată față de așteptări, în ultimele 48 de ore. Datele importante cântăresc mai mult, cele vechi mai puțin.</td></tr>
+          <tr><td>Macro structural</td><td>Diferența de dobândă dintre banca centrală (BOE sau BCE) și Fed, inflația, creșterea economică și piața muncii.</td></tr>
+          <tr><td>Dolar larg</td><td>Dacă dolarul se întărește față de restul monedelor, nu doar față de perechea analizată. La EUR/USD se folosește un coș fără euro.</td></tr>
+          <tr><td>Structura sesiunii</td><td>Mișcarea de la deschiderea Sydney și dacă prețul a ieșit din intervalul sesiunii asiatice, semnalul clasic al sesiunii Londra.</td></tr>
+          <tr><td>Flux de știri</td><td>Tonul titlurilor din ultimele 36 de ore, legat de moneda despre care vorbesc. Titlurile noi cântăresc mai mult.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note note--flat">
+      <strong>„Fără trade” e un rezultat, nu o eroare.</strong>
+      Raportul împarte semnalele în fundamental (calendar, macro, știri) și preț (dolar,
+      sesiune). Când cele două se contrazic, concluzia e „fără trade”, oricât de mare ar
+      fi scorul net. Raportul arată ambele jumătăți, ca să vezi singur dezacordul.
+    </div>
+  </section>
+
+  <section id="probleme">
+    <h2>Dacă ceva nu merge</h2>
+    <div class="scroll">
+      <table>
+        <caption>În ordinea în care merită verificat</caption>
+        <thead>
+          <tr><th>Ce vezi</th><th>Ce înseamnă</th><th>Ce faci</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Nu s-a deschis nimic la ora programată</td>
+            <td>Calculatorul era oprit, în sleep, sau nu erai logat</td>
+            <td>Faci un raport la cerere; slotul ratat nu se recuperează singur</td>
+          </tr>
+          <tr>
+            <td>Pagina spune „Raportul nu s-a putut genera” la o pereche</td>
+            <td>O sursă de date nu a răspuns la timp</td>
+            <td>Mai încerci o dată după un minut; cealaltă pereche e valabilă</td>
+          </tr>
+          <tr>
+            <td>„Avertizări surse” la finalul raportului</td>
+            <td>Una sau mai multe surse au lipsit</td>
+            <td>Una sau două sunt normale; dacă lipsesc multe, ia raportul cu rezervă</td>
+          </tr>
+          <tr>
+            <td>Dublu-click pe start.bat nu face nimic</td>
+            <td>Node.js lipsește sau nu e găsit</td>
+            <td>Îi ceri lui Claude Code să verifice instalarea, sau rulezi din nou promptul</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="oprire">
+    <h2>Oprire și dezinstalare</h2>
+    <div class="cmds">
+      <div class="cmd">
+        <h3>Opresc rapoartele programate</h3>
+        <p>Îi ceri lui Claude Code „oprește programarea FX Brief”. Sau singur:</p>
+        <p>Windows: <code>Unregister-ScheduledTask -TaskName 'FX Brief' -Confirm:$false</code></p>
+        <p>Mac: <code>launchctl bootout gui/$(id -u)/local.fx-brief</code>, apoi ștergi <span class="mono">~/Library/LaunchAgents/local.fx-brief.plist</span></p>
+        <p>Linux: <code>systemctl --user disable --now fx-brief.timer</code></p>
+      </div>
+      <div class="cmd">
+        <h3>Dezinstalez tot</h3>
+        <p>Oprești întâi programarea, apoi ștergi folderul <span class="mono">fx-brief</span>. Nu rămâne nimic altceva pe calculator. Node.js poate rămâne; îl folosesc și alte programe.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="limite">
+    <h2>Ce trebuie să știi înainte să te bazezi pe el</h2>
+    <p>
+      Ponderile și pragurile sunt stabilite din judecată, nu testate pe date istorice.
+      Nu știm încă ce rată de reușită are. Raportul e un rezumat ordonat al informației
+      publice din ziua respectivă, util ca punct de plecare, nu ca semnal de intrare.
+    </p>
+    <p>
+      Programul doar citește date publice. Nu se conectează la niciun broker și nu
+      tranzacționează nimic. Dacă vrei să schimbi ceva, de exemplu orele sau perechile,
+      cere-i lui Claude Code în folderul <span class="mono">fx-brief</span>.
+    </p>
+  </section>
+
+  <footer>
+    <p style="max-width:none">
+      Surse: Yahoo Finance, ForexFactory, TradingView, ONS, Bank of England, Eurostat,
+      Banca Centrală Europeană, BLS, Federal Reserve Bank of New York, plus fluxurile de
+      știri BabyPips, FXStreet, Investing.com și MarketPulse. Toate publice, fără chei.
+    </p>
+    <p style="max-width:none">Analiză cantitativă pe date publice. Nu constituie consultanță de investiții.</p>
+  </footer>
+
+</div>
+
+<script>
+  (function () {
+    var TZ = 'Europe/Bucharest';
+    // Orele recomandate in promptul de instalare.
+    var SLOTS = [[12, 20], [16, 5], [17, 20]];
+    var DAYS = ['duminică', 'luni', 'marți', 'miercuri', 'joi', 'vineri', 'sâmbătă'];
+    var WD = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
+
+    function roParts(d) {
+      var s = new Intl.DateTimeFormat('en-GB', {
+        timeZone: TZ, hour12: false, weekday: 'short', hour: '2-digit', minute: '2-digit'
+      }).formatToParts(d);
+      var o = {};
+      s.forEach(function (p) { if (p.type !== 'literal') o[p.type] = p.value; });
+      return o;
+    }
+    function pad(n) { return (n < 10 ? '0' : '') + n; }
+
+    function nextRun(now) {
+      var p = roParts(now);
+      var nowMin = (parseInt(p.hour, 10) % 24) * 60 + parseInt(p.minute, 10);
+      var wd = WD[p.weekday];
+      for (var day = 0; day < 8; day++) {
+        var w = (wd + day) % 7;
+        if (w === 0 || w === 6) continue;
+        for (var i = 0; i < SLOTS.length; i++) {
+          var m = SLOTS[i][0] * 60 + SLOTS[i][1];
+          if (day === 0 && m <= nowMin) continue;
+          return { index: i, weekday: w, mins: day * 1440 + m - nowMin };
+        }
+      }
+      return null;
+    }
+
+    function tick() {
+      var now = new Date();
+      var p = roParts(now);
+      document.getElementById('now').textContent = pad(parseInt(p.hour, 10) % 24) + ':' + p.minute;
+      var nextEl = document.getElementById('next');
+      var n = nextRun(now);
+      if (!n) { nextEl.textContent = '—'; return; }
+      var hhmm = pad(SLOTS[n.index][0]) + ':' + pad(SLOTS[n.index][1]);
+      var rel = n.mins < 60 ? 'în ' + n.mins + ' min'
+              : n.mins < 60 * 20 ? 'în ' + Math.round(n.mins / 60) + ' h' : '';
+      nextEl.textContent = DAYS[n.weekday] + ' ' + hhmm + (rel ? ' · ' + rel : '');
+
+      var slots = document.querySelectorAll('#timetable .slot');
+      for (var i = 0; i < slots.length; i++) {
+        slots[i].classList.toggle('is-next', i === n.index);
+        var tag = slots[i].querySelector('.slot-tag');
+        if (i === n.index && !tag) {
+          tag = document.createElement('span');
+          tag.className = 'slot-tag';
+          tag.textContent = 'următorul';
+          slots[i].appendChild(tag);
+        } else if (i !== n.index && tag) {
+          tag.remove();
+        }
+      }
+    }
+
+    var btn = document.getElementById('copy-url');
+    var input = document.getElementById('prompt-url');
+    btn.addEventListener('click', function () {
+      function done() { btn.textContent = 'Copiat'; setTimeout(function () { btn.textContent = 'Copiază linkul'; }, 2000); }
+      function fallback() { input.focus(); input.select(); btn.textContent = 'Apasă Ctrl+C'; }
+      try {
+        navigator.clipboard.writeText(input.value).then(done, fallback);
+      } catch (e) { fallback(); }
+    });
+
+    tick();
+    setInterval(tick, 30000);
+  })();
+</script>
+</body>
+</html>
