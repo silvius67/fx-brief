@@ -233,22 +233,45 @@ async function getCalendar(now) {
   ).catch(e => { warnings.push(`TradingView (actuals) indisponibil: ${e.message}`); return { result: [] }; });
 
   const CC = { EU: 'EUR', DE: 'EUR', FR: 'EUR', IT: 'EUR', US: 'USD' };
+  // TradingView sends 1.4 with scale "M" where ForexFactory sends "1.39M", which
+  // parseNum turns into thousands; rescale so both sides share one unit.
+  const tvNum = (v, scale) => v == null ? null : Number(v) * (scale === 'M' ? 1000 : 1);
   const tv = (tvRaw.result || []).map(e => ({
     ts: new Date(e.date).getTime(), country: CC[e.country] || e.country,
-    title: e.title, indicator: e.indicator, actual: e.actual,
-    forecast: e.forecast, previous: e.previous, importance: e.importance,
+    title: e.title, indicator: e.indicator, actual: tvNum(e.actual, e.scale),
+    forecast: tvNum(e.forecast, e.scale), previous: tvNum(e.previous, e.scale), importance: e.importance,
+    pct: e.unit === '%',
   }));
 
+  // TradingView often lists a level and its m/m change under near-identical
+  // titles (Housing Starts / Housing Starts MoM), so the title alone cannot pick
+  // the row. A candidate must share ForexFactory's unit and magnitude, and among
+  // those the one whose previous/forecast sits closest to ForexFactory's wins.
+  const far = (a, b) => a != null && b != null && Math.max(Math.abs(a), Math.abs(b)) >= 10
+    && Math.max(Math.abs(a), Math.abs(b)) > 20 * Math.max(Math.min(Math.abs(a), Math.abs(b)), 1e-9);
+  const gap = (a, b) => a == null || b == null ? Infinity : Math.abs(a - b) / Math.max(Math.abs(a), Math.abs(b), 1e-9);
   const used = new Set();
   const match = ev => {
-    let best = null, bs = 0;
+    let best = null, bs = 0, bg = Infinity, rejected = false;
+    const ref = ev.previous ?? ev.forecast;
     for (let i = 0; i < tv.length; i++) {
-      if (used.has(i) || tv[i].country !== ev.cc || Math.abs(tv[i].ts - ev.ts) > 5.4e6) continue;
-      const s = Math.max(overlap(ev.title, tv[i].title), overlap(ev.title, tv[i].indicator || ''));
-      if (s > bs) { bs = s; best = i; }
+      const r = tv[i];
+      if (used.has(i) || r.country !== ev.cc || Math.abs(r.ts - ev.ts) > 5.4e6) continue;
+      const s = Math.max(overlap(ev.title, r.title), overlap(ev.title, r.indicator || ''));
+      if (s < 0.5) continue;
+      if ((ev.pct != null && r.pct !== ev.pct) || far(r.actual, ref) || far(r.previous, ev.previous)) { rejected = true; continue; }
+      const g = Math.min(gap(r.previous, ev.previous), gap(r.forecast, ev.forecast));
+      if (s > bs || (s === bs && g < bg)) { bs = s; bg = g; best = i; }
     }
-    if (best !== null && bs >= 0.5) { used.add(best); return tv[best]; }
+    if (best !== null) { used.add(best); return tv[best]; }
+    if (rejected) warnings.push(`Calendar: ${ev.cc} ${ev.title} - actualul TradingView nu e pe aceeasi scara cu consensul ForexFactory, ignorat.`);
     return null;
+  };
+  // "0.8%" needs a percent row, "1.39M" a level row; a bare number (yields, ZEW)
+  // leaves the unit open and only the magnitude check applies.
+  const isPct = e => {
+    const s = [e.forecast, e.previous].map(v => String(v ?? '')).join(' ');
+    return /%/.test(s) ? true : /\d[KMBT]\b/i.test(s) ? false : null;
   };
 
   let events = [], scheduleSource = 'ForexFactory';
@@ -256,11 +279,12 @@ async function getCalendar(now) {
     events = ff.filter(e => ['EUR', 'USD'].includes(e.country)).map(e => {
       const ts = new Date(e.date).getTime();
       const cc = e.country;
-      const m = match({ ts, cc, title: e.title });
+      const forecast = parseNum(e.forecast), previous = parseNum(e.previous);
+      const m = match({ ts, cc, title: e.title, forecast, previous, pct: isPct(e) });
       return mkEvent(e.title, cc, ts, e.impact,
-        parseNum(e.forecast) ?? (m?.forecast != null ? Number(m.forecast) : null),
-        parseNum(e.previous) ?? (m?.previous != null ? Number(m.previous) : null),
-        m?.actual != null ? Number(m.actual) : null);
+        forecast ?? m?.forecast ?? null,
+        previous ?? m?.previous ?? null,
+        m?.actual ?? null);
     });
   } else if (tv.length) {
     scheduleSource = 'TradingView (fallback)';
